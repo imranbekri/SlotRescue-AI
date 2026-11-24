@@ -28,6 +28,24 @@ SlotRescue AI is an AI-powered appointment recovery agent that identifies eligib
 - Timestamped agent activity log.
 - Interactive Streamlit dashboard.
 
+## Application Screenshots
+
+### Business Dashboard
+![Dashboard]
+![alt text](image.png)
+
+### AI Recovery Agent
+![AI Recommendation]
+![alt text](image-1.png)
+
+### Successful Appointment Recovery
+![Recovery]
+![alt text](image-2.png)
+
+### Automated Testing
+![Tests]
+![alt text](image-3.png)
+
 ## Technology Stack
 
 | Technology | Purpose |
