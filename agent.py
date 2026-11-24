@@ -2,6 +2,10 @@ import os
 import json
 import requests
 from dotenv import load_dotenv
+from validation import (
+    validate_recommendation,
+    fallback_recommendation
+)
 
 load_dotenv()
 
@@ -82,6 +86,38 @@ def generate_recommendation(appointment, candidates):
     return json.loads(content)
 
 
+def safe_recommendation(appointment, candidates):
+
+    if not candidates:
+        return None
+
+    try:
+        result = generate_recommendation(
+            appointment, candidates
+        )
+
+        if validate_recommendation(result, candidates):
+            result["source"] = "Nebius AI"
+            return result
+
+    except (
+        requests.RequestException,
+        ValueError,
+        KeyError,
+        IndexError,
+        TypeError
+    ):
+        pass
+
+    result = fallback_recommendation(
+        appointment, candidates
+    )
+
+    result["source"] = "Rule-based fallback"
+
+    return result
+
+
 if __name__ == "__main__":
     from data import appointments, customers
     from matching import rank_customers
@@ -92,7 +128,7 @@ if __name__ == "__main__":
         appointment, customers
     )
 
-    recommendation = generate_recommendation(
+    recommendation = safe_recommendation(
         appointment, candidates
     )
 
