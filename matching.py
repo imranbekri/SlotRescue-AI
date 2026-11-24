@@ -16,12 +16,41 @@ def find_eligible_customers(appointment, customers, max_discount=10):
 
     return eligible
 
+def rank_customers(appointment, customers, max_discount=10):
+    eligible = find_eligible_customers(
+        appointment, customers, max_discount
+    )
+
+    ranked = []
+
+    for customer in eligible:
+        discount = max(0, appointment["price"] - customer["budget"])
+
+        recovered_revenue = appointment["price"] - discount
+
+        ranked.append({
+            **customer,
+            "discount": discount,
+            "recovered_revenue": recovered_revenue
+        })
+
+    ranked.sort(
+        key=lambda customer: (
+            -customer["recovered_revenue"],
+            -customer["waiting_days"]
+        )
+    )
+
+    return ranked
+
 if __name__ == "__main__":
     from data import appointments, customers
 
-    matches = find_eligible_customers(
-        appointments[1], customers
-    )
+    ranked = rank_customers(appointments[1], customers)
 
-    for customer in matches:
-        print(customer["name"])    
+    for customer in ranked:
+        print(
+            customer["name"],
+            "Discount: £" + str(customer["discount"]),
+            "Revenue: £" + str(customer["recovered_revenue"])
+        )
