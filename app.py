@@ -14,3 +14,8 @@ st.write(
     "Helping businesses recover revenue "
     "from cancelled appointments."
 )
+
+from data import appointments
+
+st.header("Appointment Dashboard")
+st.dataframe(appointments)
